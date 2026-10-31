@@ -1,0 +1,38 @@
+// Part A
+Map.centerObject(ctb, 15);
+S2 = S2.filterBounds(ctb);
+S2 = S2.filterDate("2019-09-27", "2019-09-28");
+var beforeImage = S2.first();
+Map.addLayer(beforeImage, beforeImageS2, "beforeImage");
+
+// Part B
+beforeImage = beforeImage.select( [ "B2", "B3", "B4", "B8", "B5", "B6", "B7", "B8A", "B9", "B11", "B12" ] );
+beforeImage = beforeImage.clip(studyArea);
+var training = beforeImage.sample( { region: studyArea,   numPixels: 25000 } );
+var clusterer = ee.Clusterer.wekaKMeans(6).train(training);
+var beforeImageCluster  = beforeImage.cluster(clusterer);
+Map.addLayer(beforeImageCluster.randomVisualizer(), {}, 'cluster');
+
+// Part C
+var locations = beforeImageCluster.stratifiedSample({numPoints: 10, geometries: true});
+Map.addLayer(locations, {color: "red"}, "locations");
+var groundTruth = Water.merge(Sand).merge(Saltmarsh).merge(Mangrove).merge(Trees);
+groundTruth = groundTruth.randomColumn();
+var training = groundTruth.filter(ee.Filter.gt('random', 0.4));
+var validation = groundTruth.filter(ee.Filter.lte('random', 0.4));
+
+// Part D
+training = beforeImage.sampleRegions(training);
+var RF = ee.Classifier.smileRandomForest(100).train(training, 'label');
+var classified = beforeImage.classify(RF);
+Map.addLayer(classified, { min: 0, max: 4, palette: [ 'blue', 'grey', 'yellow', 'green', 'brown' ] }, 'classification');
+
+// Part E
+validation = beforeImage.sampleRegions(validation);
+validation = validation.classify(RF);
+var errorMatrix = validation.errorMatrix('label', 'classification');
+print("error Matrix", errorMatrix);
+var accuracy = errorMatrix.accuracy();
+var kappa = errorMatrix.kappa();
+print("accuracy", accuracy);
+print("kappa", kappa);
