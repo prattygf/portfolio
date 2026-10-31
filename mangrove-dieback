@@ -36,3 +36,77 @@ var accuracy = errorMatrix.accuracy();
 var kappa = errorMatrix.kappa();
 print("accuracy", accuracy);
 print("kappa", kappa);
+
+
+
+
+// Seperate Project in google earth engine
+var planetbi = ee.ImageCollection("projects/ee-kevinpdavies/assets/PlanetSR");
+Map.centerObject(ctb,15);
+planetbi = planetbi.filterBounds(ctb);
+planetbi = planetbi.filterDate("2019-09-26", "2019-09-27");
+print ("Planet Before Collection", planetbi);
+var planetbi = planetbi.first();
+Map.addLayer(planetbi, beforeimage, "beforeimage");
+var beforeimageNDVI = planetbi.normalizedDifference(['b4', 'b3']);
+
+
+var planetai = ee.ImageCollection("projects/ee-kevinpdavies/assets/PlanetSR");
+planetai = planetai.filterDate("2022-09-19", "2022-09-20");
+print("Planet After Collection", planetai);
+var planetai = planetai.first();
+Map.addLayer(planetai, afterimage, "afterimage");
+var afterimageNDVI = planetai.normalizedDifference(['b8','b6']);
+
+var deltaNDVI = afterimageNDVI.subtract(beforeimageNDVI);
+Map.addLayer(deltaNDVI, {min: -0.5, max: 0.5, palette: ['red', 'white', 'green']}, "deltaNDVIimage");
+
+var veg = beforeimageNDVI.gte(0.3);
+var deltaNDVIMasked = deltaNDVI.updateMask(veg);
+var dieback = deltaNDVIMasked.lte(-0.1);
+dieback = dieback.updateMask(dieback.eq(1));
+dieback = dieback.clip(mangroves);
+Map.addLayer(dieback, diebackimage, "dieback");
+
+var diebackReduce = dieback.reduceRegion({ reducer: ee.Reducer.count() });
+var pixelCount = ee.Number(diebackReduce.get('nd'));
+var pixelArea = ee.Number(3).pow(2);
+var diebackArea = pixelCount.multiply(pixelArea);
+diebackArea = diebackArea.multiply(0.000001);
+print("Magrove Dieback (km^2) = ", diebackArea);
+
+S2 = S2.filterBounds(ctb);
+
+function maskClouds(image) {
+    var cloudProb = image.select('MSK_CLDPRB');
+    var scl = image.select('SCL');
+    var valid = scl.gte(2).and(scl.lte(7));
+    var mask = cloudProb.eq(0).and(valid);
+    image = image.updateMask(mask);
+    return image;
+};
+function calcNDVI(image) {
+  var ndvi = image.normalizedDifference(["B8", "B4"]);
+  ndvi = ndvi.set("system:time_start", image.get("system:time_start"));
+  return ndvi;
+};
+
+
+
+S2 = S2.map(maskClouds);
+var ndviImages = S2.map(calcNDVI);
+
+var chart = ui.Chart.image.seriesByRegion({
+    imageCollection: ndviImages,
+    regions: ctb,
+    xProperty: "system:time_start",
+    reducer: ee.Reducer.mean()
+});
+chart = chart .setOptions({
+    title: 'Sentinel-2 NDVI Time Series',
+    hAxis: {title: 'Date', titleTextStyle: {italic: false, bold: true}},
+    vAxis: {title: 'NDVI', titleTextStyle: {italic: false, bold: true}},
+    interpolateNulls: true 
+});
+
+print("Dieback Series Chart", chart);
