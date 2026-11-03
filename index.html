@@ -33,7 +33,7 @@
   @media (max-width: 640px) { nav ul { gap: 14px; font-size: .85rem; } nav ul li.hide-sm { display: none; } }
 
   /* Hero */
-  header.hero { padding: 72px 0 48px; }
+  header.hero { padding: 72px 20px 48px; }
   .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; font-weight: 600; color: var(--eyebrow); margin: 0 0 12px; }
   h1, h2, h3 { color: var(--heading); font-family: Fraunces, Georgia, serif; font-weight: 650; line-height: 1.15; }
   h1 { font-size: clamp(2.3rem, 6vw, 3.6rem); margin: 0 0 18px; }
@@ -51,6 +51,18 @@
   .skill { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
   .skill h3 { color: var(--sand); font-family: Inter, sans-serif; font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); margin: 0 0 8px; }
   .skill p { margin: 0; font-size: .93rem; color: var(--muted); }
+  .skills + .group-label { margin-top: 28px; }
+  .group-label { font-family: Inter, sans-serif; font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--eyebrow); margin: 0 0 12px; }
+  .skill.soft h3 { color: var(--sand); }
+
+  /* Education and experience */
+  .entry { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px 26px; margin-bottom: 16px; }
+  .entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 16px; flex-wrap: wrap; }
+  .entry h3 { font-size: 1.2rem; margin: 0; }
+  .entry .when { color: var(--sand); font-size: .9rem; font-weight: 500; white-space: nowrap; }
+  .entry .role { color: var(--muted); font-size: .95rem; margin: 4px 0 0; }
+  .entry ul { padding-left: 20px; margin: 10px 0 0; }
+  .entry li { font-size: .95rem; }
 
   /* Projects */
   article.project { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 32px; margin-bottom: 28px; }
@@ -85,8 +97,9 @@
   <div class="wrap">
     <a class="brand" href="#top">Thomas Pratt</a>
     <ul>
-      <li><a href="#projects">Projects</a></li>
       <li class="hide-sm"><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li class="hide-sm"><a href="#experience">Experience</a></li>
       <li><a href="resume.pdf">Resume</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -94,8 +107,9 @@
 </nav>
 
 <header class="hero wrap" id="top">
-  <h1>My GIS Portfolio.</h1>
-  <p class="lead">I'm a final-year Bachelor of Science student at the University of Sydney (Environmental Studies, Geology and Geophysics). I have used GIS and satellite imagery to model, classify and monitor landscapes, and I'm interested in how spatial analysis underpins credible nature-based projects.</p>
+  <p class="eyebrow">GIS &amp; Remote Sensing Portfolio</p>
+  <h1>Thomas Pratt</h1>
+  <p class="lead">I'm a final-year Bachelor of Science student at the University of Sydney (Environmental Studies, Geology and Geophysics), graduating in 2026. I have experience with GIS and remote sensing, including spatial modelling in ArcGIS Pro and satellite image analysis in Google Earth Engine. I'm a team player and clear communicator, with experience leading group GIS work and training staff. I'm interested in GIS roles in environmental markets and natural resource management.</p>
   <div class="buttons">
     <a class="btn primary" href="#projects">View projects</a>
     <a class="btn" href="resume.pdf">Resume (PDF)</a>
@@ -107,12 +121,19 @@
 <section id="skills">
   <div class="wrap">
     <h2>Skills</h2>
+    <p class="group-label">Technical</p>
     <div class="skills">
       <div class="skill"><h3>GIS</h3><p>ArcGIS Pro (ModelBuilder, multi-criteria analysis, raster and overlay analysis, cartography), QGIS</p></div>
       <div class="skill"><h3>Remote sensing</h3><p>Google Earth Engine, Sentinel-2 and Planet imagery, random forest classification, NDVI change detection and time series, accuracy assessment</p></div>
       <div class="skill"><h3>Programming</h3><p>Python, JavaScript (Earth Engine)</p></div>
       <div class="skill"><h3>Policy familiarity</h3><p>EPBC Act 1999, Native Title Act 1993, NSW State Significant Development and Social Impact Assessment, ACCU Scheme</p></div>
-      <div class="skill"><h3>Field</h3><p>Geological mapping, field sketching and stratigraphic logging </p></div>
+      <div class="skill"><h3>Field</h3><p>Geological mapping, field sketching and stratigraphic logging (Orange and Bombo, NSW)</p></div>
+    </div>
+    <p class="group-label">Professional</p>
+    <div class="skills">
+      <div class="skill soft"><h3>Communication</h3><p>Explaining technical information in plain language, whether to customers, council representatives or in written reports</p></div>
+      <div class="skill soft"><h3>Teamwork &amp; leadership</h3><p>GIS lead in a five-person group project; training and supervising new staff at work</p></div>
+      <div class="skill soft"><h3>Working with people</h3><p>Comfortable dealing with a wide range of people, from contractors and council staff to the general public</p></div>
     </div>
   </div>
 </section>
@@ -147,7 +168,7 @@
           </ol>
         </div>
       </div>
-      <p class="result"><strong>Result:</strong> <span>Found that 0.074502 km^2 of mangrove dieback mapped between 2019 and 2022, with major decline beginning around late 2020.</span></p>
+      <p class="result"><strong>Result:</strong> About 7.5 ha (0.075 km&sup2;) of mangrove dieback mapped between 2019 and 2022, with major decline beginning in late 2020.</p>
       <div class="figs-row">
         <figure><img src="images/mangrove-landcover.png" alt="Land cover classification map of Cabbage Tree Basin" loading="lazy"><figcaption>Random forest land cover classification (Sentinel-2, 2019).</figcaption></figure>
         <figure><img src="images/mangrove-dieback.png" alt="NDVI difference map showing mangrove dieback" loading="lazy"><figcaption>NDVI change 2019 to 2022, dieback highlighted.</figcaption></figure>
@@ -212,6 +233,47 @@
       </div>
     </article>
 
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <h2>Education</h2>
+    <div class="entry">
+      <div class="entry-head"><h3>University of Sydney</h3><span class="when">2024 &ndash; 2026</span></div>
+      <p class="role">Bachelor of Science, majoring in Environmental Studies and minoring in Geology and Geophysics (expected completion 2026)</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><h3>University of New South Wales</h3><span class="when">2023</span></div>
+      <p class="role">Bachelor of Engineering (Honours), Software Engineering: completed first year (programming, algorithms, systems design) before transferring to environmental studies</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><h3>Knox Grammar School</h3><span class="when">2020 &ndash; 2022</span></div>
+      <p class="role">Higher School Certificate, ATAR 95.05; ranked 1st in school in Earth and Environmental Science</p>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <h2>Work Experience</h2>
+    <div class="entry">
+      <div class="entry-head"><h3>Stihl Shop Stanmore</h3><span class="when">Aug 2024 &ndash; Present</span></div>
+      <p class="role">Senior Sales Associate</p>
+      <ul>
+        <li>Advise local council representatives and contractors on equipment purchases aligned with council maintenance and landscaping requirements.</li>
+        <li>Recommend chainsaws, trimmers, blowers and safety gear matched to customer needs, and provide post-purchase troubleshooting and maintenance advice.</li>
+        <li>Open and close the store as a key holder and run the front of the store unsupervised.</li>
+        <li>Train and supervise new staff on products, safety gear and the POS system.</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><h3>The Athlete's Foot</h3><span class="when">Mar 2023 &ndash; Apr 2025</span></div>
+      <p class="role">Retail Assistant</p>
+      <ul>
+        <li>Produced sales reports and analysed product performance in MS Excel and Erply ERP.</li>
+      </ul>
+    </div>
   </div>
 </section>
 
